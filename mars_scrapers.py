@@ -10,13 +10,7 @@ def scrape_info():
 
     # Pass connection to the pymongo instance.
     client = pymongo.MongoClient(conn)
-
-    # Connect to a database. Will create one if not already available.
     db = client.mars_db
-
-    # Drops collection if available to remove duplicates
-    db.mars.drop()
-
     executable_path= {"executable_path": ChromeDriverManager().install()}
     browser= Browser("chrome", **executable_path, headless=False)
     url = "https://mars.nasa.gov/news/?page=0&per_page=40&order=publish_date+desc%2Ccreated_at+desc&search=&category=19%2C165%2C184%2C204&blank_scope=Latest"
@@ -36,6 +30,7 @@ def scrape_info():
     html=browser.html
     soup2=bs(html,"html.parser")
     results2= soup2.find('img', class_= "fancybox-image")
+    time.sleep(1)
     image_path=results2["src"]
     new_url= base_url + image_path
     print(new_url)
@@ -44,6 +39,7 @@ def scrape_info():
     facts_html= browser.html
     facts_soup= bs(facts_html, "html.parser")
     #find table and get to html string
+    time.sleep(1)
     results3= facts_soup.find('aside', class_="widget widget_text clearfix")
     # print(results3)
     # table= [{"equator": 1}, {"discovered by": "egyptians"},]
@@ -81,15 +77,16 @@ def scrape_info():
         empty['img_url']= links1
         hemisphere_image_urls.append(empty)
         browser.back()
-    combined= [{
-    "Header": header},
-    {"Paragraph": paragraph},
-    {"New url": new_url},
-    {"keys": keys},
-    {"Values": values},
-    {"Hemisphere Image URLS": hemisphere_image_urls}
-    ]
+    combined= {
+    "Header": header,
+    "Paragraph": paragraph,
+    "New_url": new_url,
+    "keys": keys,
+    "Values": values,
+    "Hemisphere_Image_URLS": hemisphere_image_urls}
+
     # Creates a collection in the database and inserts two documents
-    db.mars.insert_many(combined)
-    #insert into mongodb
+    db.mars.insert_one(combined, upsert=True)
+     # Close the browser after scraping
+    browser.quit()
     return combined
