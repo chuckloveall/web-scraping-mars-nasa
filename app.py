@@ -34,7 +34,7 @@ def scrape():
     combined= mars_scrapers.scrape_info()
 
     # Update the Mongo database using update and upsert=True
-    mongo.db.collection.update({}, combined, upsert=True)
+    mongo.db.mars.update_many({}, combined, upsert=True)
 
     # Redirect back to home page
     return redirect(url_for('home'))

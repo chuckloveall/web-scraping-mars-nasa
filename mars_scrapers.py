@@ -29,11 +29,13 @@ def scrape_info():
     base_url="https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/"
     html=browser.html
     soup2=bs(html,"html.parser")
+    time.sleep(1)
     results2= soup2.find('img', class_= "fancybox-image")
     time.sleep(1)
     image_path=results2["src"]
+    time.sleep(1)
     new_url= base_url + image_path
-    print(new_url)
+    # print(new_url)
     facts_url= "https://space-facts.com/mars/"
     browser.visit(facts_url)
     facts_html= browser.html
@@ -86,7 +88,7 @@ def scrape_info():
     "Hemisphere_Image_URLS": hemisphere_image_urls}
 
     # Creates a collection in the database and inserts two documents
-    db.mars.insert_one(combined, upsert=True)
+    db.mars.insert_one(combined)
      # Close the browser after scraping
     browser.quit()
     return combined
