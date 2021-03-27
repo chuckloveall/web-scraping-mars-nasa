@@ -28,31 +28,34 @@
         </form>
         </div>
     </nav>
-    {%for mar in mars_data%}
+
     <div class="header">
-        <h3>{mar.header}</h3>
-        <p>{mar.Paragraph}</p>
+        <h3>{{mars_data.Header}}</h3>
+        <p>{{mars_data.Paragraph}}</p>
     </div>
 
-    {%endfor%}
+<div class="">
+    {{(mars_data)}}
+</div>
     <div class="table">
         <table class="table table-hover">
-          <thead>
-              {%for mar in mars_data%}
+            {%for mar in mars_data.Keys%}
             <tr class="table-danger">
-             <th scope="row">{mar.keys}</th>
-             <td>{mar.Values}</td>
-           </tr>
-           {%endfor%}
-        </tbody>
+                <td>{{mars_data.Keys[loop.index0]}}</td>
+             <td scope="row">{{mars_data.Values[loop.index0]}}</td>
+             </tr>
+             {%endfor%}
     </table>
     </div>
-        {%for mar in mars_data%}
+        {%for mar in mars_data.Hemisphere_Image_URLS%}
         <div class="imgs">
-            <img src="{mar.Hemisphere_Image_URLS}" alt="mars hemisphere image">
+            <img src="{{mar.image_url}}" alt="mars hemisphere image">
+            <p>{{mar.title}}</p>
         </div>
         {%endfor%}
-
+        <script type="text/javascript">
+            console.log(mars_data)
+        </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     </body>
 </html>

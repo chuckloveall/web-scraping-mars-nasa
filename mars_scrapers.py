@@ -16,6 +16,7 @@ def scrape_info():
     url = "https://mars.nasa.gov/news/?page=0&per_page=40&order=publish_date+desc%2Ccreated_at+desc&search=&category=19%2C165%2C184%2C204&blank_scope=Latest"
     # Retrieve page with the requests module
     browser.visit(url)
+    time.sleep(1)
     html=browser.html
     # Create BeautifulSoup object; parse with 'html.parser'
     soup = bs(html,'html.parser')
@@ -25,15 +26,14 @@ def scrape_info():
     paragraph = soup.find('div', class_='article_teaser_body').text
     url2= "https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/index.html"
     browser.visit(url2)
-    links_found = browser.links.find_by_partial_href('featured').click()
-    base_url="https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/"
+    time.sleep(1)
+    links_found = browser.find_by_text(' FULL IMAGE').click()
+    time.sleep(1)
     html=browser.html
     soup2=bs(html,"html.parser")
-    time.sleep(1)
     results2= soup2.find('img', class_= "fancybox-image")
-    time.sleep(1)
     image_path=results2["src"]
-    time.sleep(1)
+    base_url="https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/"
     new_url= base_url + image_path
     # print(new_url)
     facts_url= "https://space-facts.com/mars/"
@@ -42,17 +42,12 @@ def scrape_info():
     facts_soup= bs(facts_html, "html.parser")
     #find table and get to html string
     time.sleep(1)
-    results3= facts_soup.find('aside', class_="widget widget_text clearfix")
-    # print(results3)
-    # table= [{"equator": 1}, {"discovered by": "egyptians"},]
-    # table.append
-    # td[0] key td[1] value
+
     trs=facts_soup.find_all('tr')
     # labels= facts_soup.find_all('strong')
     keys= []
     values= []
     # print(trs[0])
-    # labels[0].text gives label for row, can use for table
     # trs[0].text gives you 'Equatorial Diameter:6,792 km'
     new_split= trs[0].text.split(':')
     # new_split[1]
@@ -75,15 +70,20 @@ def scrape_info():
     for i in range(len(links)):
         empty= {}
         browser.find_by_css('a.product-item img')[i].click()
+        time.sleep(1)
+        html4= browser.html
         links1= browser.find_by_text('Sample')['href']
         empty['img_url']= links1
+        title_soup= bs(html4, 'html.parser')
+        links2=title_soup.find('h2', class_='title').text
+        empty['title']= links2
         hemisphere_image_urls.append(empty)
         browser.back()
     combined= {
     "Header": header,
     "Paragraph": paragraph,
     "New_url": new_url,
-    "keys": keys,
+    "Keys": keys,
     "Values": values,
     "Hemisphere_Image_URLS": hemisphere_image_urls}
 
