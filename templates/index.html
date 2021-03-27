@@ -22,10 +22,6 @@
             <a class="nav-link" href="/scrape">Scrape</a>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="text" placeholder="Search">
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-        </form>
         </div>
     </nav>
 
@@ -37,19 +33,24 @@
 <div class="">
     {{(mars_data)}}
 </div>
-    <div class="table">
-        <table class="table table-hover">
-            {%for mar in mars_data.Keys%}
+<div class="table">
+<table>
+
+
+    <thead>
+        <tbody>
             <tr class="table-danger">
-                <td>{{mars_data.Keys[loop.index0]}}</td>
-             <td scope="row">{{mars_data.Values[loop.index0]}}</td>
-             </tr>
-             {%endfor%}
-    </table>
-    </div>
+      <tr scope="row"></tr>
+      <td class= "column-1">{{mars_data.Keys}}</td>
+      <td class= "column-2">{{mars_data.Values}}</td>
+    </tr>
+        </tbody>
+    </thead>
+</table>
+</div>
         {%for mar in mars_data.Hemisphere_Image_URLS%}
         <div class="imgs">
-            <img src="{{mar.image_url}}" alt="mars hemisphere image">
+            <img src="{{mar.img_url}}" alt="mars hemisphere image">
             <p>{{mar.title}}</p>
         </div>
         {%endfor%}

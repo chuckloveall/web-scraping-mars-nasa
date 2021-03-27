@@ -43,14 +43,14 @@ def scrape_info():
     #find table and get to html string
     time.sleep(1)
 
-    trs=facts_soup.find_all('tr')
+    trs=facts_soup.find_all('table', class_="tablepress tablepress-id-p-mars")
     # labels= facts_soup.find_all('strong')
     keys= []
     values= []
     # print(trs[0])
     # trs[0].text gives you 'Equatorial Diameter:6,792 km'
-    new_split= trs[0].text.split(':')
-    # new_split[1]
+    # new_split= trs[0].text.split(':')
+    # # new_split[1]
     for tr in trs:
         split= tr.text.split(':')
     #     print(split)
@@ -59,8 +59,11 @@ def scrape_info():
             values.append(split[1])
         except:
             pass
-    print(keys)
-    print(values)
+    # print(keys)
+    # print(values)
+    # new_trs=trs[0:1]
+    # new_trs= facts_soup.tr
+    # next_sib= new_trs.find_next_siblings('tr')
     usgs_url= "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
     hemisphere_image_urls= []
     browser.visit(usgs_url)
